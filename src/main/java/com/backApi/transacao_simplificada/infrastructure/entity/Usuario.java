@@ -20,9 +20,16 @@ public class Usuario {
 
     private String nomeCompleto;
 
+    @Column(unique = true, nullable = false)
     private String email;
 
+    @Column(unique = true, nullable = false)
     private String cpfCnpj;
 
     private String senha;
+
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private Carteira carteira;
+
+    private TipoUsuario tipoUsuario;
 }
