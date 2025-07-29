@@ -3,7 +3,9 @@ package com.backApi.transacao_simplificada.services;
 import com.backApi.transacao_simplificada.controller.TransacaoDTO;
 import com.backApi.transacao_simplificada.infrastructure.entity.Carteira;
 import com.backApi.transacao_simplificada.infrastructure.entity.TipoUsuario;
+import com.backApi.transacao_simplificada.infrastructure.entity.Transacoes;
 import com.backApi.transacao_simplificada.infrastructure.entity.Usuario;
+import com.backApi.transacao_simplificada.infrastructure.repository.TransacaoRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +19,7 @@ public class TransferenciaService {
     private final UsuarioService usuarioService;
     private final AutorizacaoService autorizacaoService;
     private final CarteiraService carteiraService;
+    private final TransacaoRepository repository;
 
     @Transactional
     public void transferirValores(TransacaoDTO transacaoDTO) {
@@ -37,6 +40,13 @@ public class TransferenciaService {
         recebedor.getCarteira().setSaldo(pagador.getCarteira().getSaldo().add(transacaoDTO.value()));
         atualizarSaldoCarteira(recebedor.getCarteira());
 
+        Transacoes transacoes = Transacoes.builder()
+                .valor(transacaoDTO.value())
+                .pagador(pagador)
+                .recebedor(recebedor)
+                .build();
+
+        repository.save(transacoes);
 
     }
 
