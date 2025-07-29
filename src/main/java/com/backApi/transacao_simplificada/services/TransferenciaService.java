@@ -1,14 +1,17 @@
 package com.backApi.transacao_simplificada.services;
 
 import com.backApi.transacao_simplificada.controller.TransacaoDTO;
+import com.backApi.transacao_simplificada.infrastructure.clients.NotificacaoClient;
 import com.backApi.transacao_simplificada.infrastructure.entity.Carteira;
 import com.backApi.transacao_simplificada.infrastructure.entity.TipoUsuario;
 import com.backApi.transacao_simplificada.infrastructure.entity.Transacoes;
 import com.backApi.transacao_simplificada.infrastructure.entity.Usuario;
+import com.backApi.transacao_simplificada.infrastructure.exceptions.BadRequestException;
 import com.backApi.transacao_simplificada.infrastructure.repository.TransacaoRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.math.BigDecimal;
 
@@ -20,6 +23,7 @@ public class TransferenciaService {
     private final AutorizacaoService autorizacaoService;
     private final CarteiraService carteiraService;
     private final TransacaoRepository repository;
+    private final NotificacaoService notificacaoService;
 
     @Transactional
     public void transferirValores(TransacaoDTO transacaoDTO) {
@@ -47,6 +51,8 @@ public class TransferenciaService {
                 .build();
 
         repository.save(transacoes);
+
+        enviarNotificacao();
 
     }
 
@@ -82,6 +88,14 @@ public class TransferenciaService {
 
     private void atualizarSaldoCarteira(Carteira carteira) {
         carteiraService.salvar(carteira);
+    }
+
+    private void enviarNotificacao() {
+        try {
+            notificacaoService.enviarNotificacao();
+        } catch (HttpClientErrorException e) {
+            throw new BadRequestException("Erro ao enviar notificação");
+        }
     }
 
 }
