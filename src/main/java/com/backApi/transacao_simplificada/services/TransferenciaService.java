@@ -34,6 +34,9 @@ public class TransferenciaService {
         //Deu tudo ok, vamos salvar o novo saldo da carteira
         pagador.getCarteira().setSaldo(pagador.getCarteira().getSaldo().subtract(transacaoDTO.value()));
         atualizarSaldoCarteira(pagador.getCarteira());
+        recebedor.getCarteira().setSaldo(pagador.getCarteira().getSaldo().add(transacaoDTO.value()));
+        atualizarSaldoCarteira(recebedor.getCarteira());
+
 
     }
 
