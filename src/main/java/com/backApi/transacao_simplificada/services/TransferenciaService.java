@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 public class TransferenciaService {
 
     private final UsuarioService usuarioService;
+    private final AutorizacaoService autorizacaoService;
 
     public void transferirValores(TransacaoDTO transacaoDTO) {
 
@@ -24,7 +25,7 @@ public class TransferenciaService {
 
         validarSaldoUsuario(pagador, transacaoDTO.value());
 
-
+        validarTransferencia();
 
     }
 
@@ -47,4 +48,15 @@ public class TransferenciaService {
             throw new IllegalArgumentException(e.getMessage());
         }
     }
+
+    private  void validarTransferencia() {
+        try {
+            if (!autorizacaoService.validarTransferencia()) {
+                throw new IllegalArgumentException("Transação não autorizada pela api");
+            }
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e.getMessage());
+        }
+    }
+
 }
