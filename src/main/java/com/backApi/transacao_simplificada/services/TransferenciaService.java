@@ -1,8 +1,10 @@
 package com.backApi.transacao_simplificada.services;
 
 import com.backApi.transacao_simplificada.controller.TransacaoDTO;
+import com.backApi.transacao_simplificada.infrastructure.entity.Carteira;
 import com.backApi.transacao_simplificada.infrastructure.entity.TipoUsuario;
 import com.backApi.transacao_simplificada.infrastructure.entity.Usuario;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +16,9 @@ public class TransferenciaService {
 
     private final UsuarioService usuarioService;
     private final AutorizacaoService autorizacaoService;
+    private final CarteiraService carteiraService;
 
+    @Transactional
     public void transferirValores(TransacaoDTO transacaoDTO) {
 
         Usuario pagador = usuarioService.buscarUsuario(transacaoDTO.payer());
@@ -26,6 +30,10 @@ public class TransferenciaService {
         validarSaldoUsuario(pagador, transacaoDTO.value());
 
         validarTransferencia();
+
+        //Deu tudo ok, vamos salvar o novo saldo da carteira
+        pagador.getCarteira().setSaldo(pagador.getCarteira().getSaldo().subtract(transacaoDTO.value()));
+        atualizarSaldoCarteira(pagador.getCarteira());
 
     }
 
@@ -57,6 +65,10 @@ public class TransferenciaService {
         } catch (Exception e) {
             throw new IllegalArgumentException(e.getMessage());
         }
+    }
+
+    private void atualizarSaldoCarteira(Carteira carteira) {
+        carteiraService.salvar(carteira);
     }
 
 }
