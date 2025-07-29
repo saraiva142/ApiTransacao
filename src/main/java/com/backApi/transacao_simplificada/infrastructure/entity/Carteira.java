@@ -23,5 +23,6 @@ public class Carteira {
     private BigDecimal saldo;
 
     @JoinColumn(name = "usuario_id")
+    @OneToOne
     private Usuario usuario;
 }
