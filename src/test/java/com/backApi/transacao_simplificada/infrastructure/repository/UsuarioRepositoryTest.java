@@ -48,11 +48,37 @@ class UsuarioRepositoryTest {
 
         }
 
+        @Test
+        @DisplayName("Should return empty when user not found by email")
+        void findUserByEmailNotFound() {
+
+            //Arrange
+            Usuario user = new Usuario(null, "Joao", "email@email.com", "111111111",
+                    "123456", null, TipoUsuario.COMMUM);
+
+            usuarioRepository.save(user);
+
+            //Act
+            Optional<Usuario> result = usuarioRepository.findUserByEmail("joao@email.com");
+
+            //Assert
+            assert(result.isEmpty());
+        }
 
 
     }
 
-    @Test
-    void findUserBycpfCnpj() {
+    @Nested
+    class findUserByCpfCnpj {
+
+        @Test
+        void findUserByCpfCnpj() {
+        }
+
+    }
+
+    @Nested
+    class findUserById {
+
     }
 }
