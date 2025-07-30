@@ -1,7 +1,6 @@
 package com.backApi.transacao_simplificada.services;
 
 import com.backApi.transacao_simplificada.controller.TransacaoDTO;
-import com.backApi.transacao_simplificada.infrastructure.clients.NotificacaoClient;
 import com.backApi.transacao_simplificada.infrastructure.entity.Carteira;
 import com.backApi.transacao_simplificada.infrastructure.entity.TipoUsuario;
 import com.backApi.transacao_simplificada.infrastructure.entity.Transacoes;
@@ -17,7 +16,7 @@ import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
-public class TransferenciaService {
+public class TransacaoService {
 
     private final UsuarioService usuarioService;
     private final AutorizacaoService autorizacaoService;
