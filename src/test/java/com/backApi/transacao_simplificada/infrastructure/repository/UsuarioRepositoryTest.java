@@ -72,7 +72,27 @@ class UsuarioRepositoryTest {
     class findUserByCpfCnpj {
 
         @Test
-        void findUserByCpfCnpj() {
+        @DisplayName("Should return user by Cpf/Cnpj with success")
+        void findUserByCpfCnpjWithSuccess() {
+            //Arrange
+            Long id = 1l;
+            Usuario user = new Usuario();
+            user.setId(id);
+            user.setNomeCompleto("Joao");
+            user.setEmail("email@email.com");
+            user.setCpfCnpj("111111111");
+            user.setSenha("123456");
+            user.setCarteira(null);
+            user.setTipoUsuario(TipoUsuario.COMMUM);
+
+            usuarioRepository.save(user);
+
+            //Act
+            Optional<Usuario> result = usuarioRepository.findUserBycpfCnpj("11111111");
+
+            //Assert
+            assert(result.isPresent());
+            assertEquals(user.getCpfCnpj(), "111111111");
         }
 
     }
