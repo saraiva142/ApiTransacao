@@ -123,5 +123,32 @@ class UsuarioRepositoryTest {
     @Nested
     class findUserById {
 
+        @Test
+        @DisplayName("Should find user by Id with success")
+        void findUserByIdWithSuccess() {
+            //Arrange
+            Long id = 1L;
+            Usuario user = new Usuario();
+            user.setId(id);
+            user.setNomeCompleto("Joao");
+            user.setEmail("email@email.com");
+            user.setSenha("123456");
+            user.setCarteira(null);
+            user.setTipoUsuario(TipoUsuario.LOJISTA);
+
+            usuarioRepository.findById(user.getId());
+
+            //Act
+            Optional<Usuario> result = usuarioRepository.findById(user.getId());
+
+            //Arrange
+            assertNotNull(result);
+            assertEquals(result.get().getNomeCompleto(), user.getNomeCompleto());
+            assertEquals(result.get().getCpfCnpj(), user.getCpfCnpj());
+            assertEquals(result.get().getCarteira(), user.getCarteira());
+            assertEquals(result.get().getSenha(), user.getSenha());
+            assertEquals(result.get().getTipoUsuario(), user.getTipoUsuario());
+
+        }
     }
 }
