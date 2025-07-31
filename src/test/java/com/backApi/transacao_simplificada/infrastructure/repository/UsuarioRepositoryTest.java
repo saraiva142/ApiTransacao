@@ -150,5 +150,29 @@ class UsuarioRepositoryTest {
             assertEquals(result.get().getTipoUsuario(), user.getTipoUsuario());
 
         }
+
+        @Test
+        @DisplayName("Should return null and empty when user are no have ID")
+        void findUserByIdEmptyWhenAreNoHaveID() {
+            //Arrange
+            Long id = 99L;
+            Usuario user = new Usuario();
+            user.setId(id);
+            user.setNomeCompleto("Joao");
+            user.setEmail("email@email.com");
+            user.setCpfCnpj("111111111");
+            user.setSenha("123456");
+            user.setCarteira(null);
+            user.setTipoUsuario(TipoUsuario.LOJISTA);
+
+            usuarioRepository.findById(id);
+
+            //Act
+            Optional<Usuario> result = usuarioRepository.findById(id);
+
+            //Arrange
+            assertNull(result);
+            assert(result.isEmpty());
+        }
     }
 }
