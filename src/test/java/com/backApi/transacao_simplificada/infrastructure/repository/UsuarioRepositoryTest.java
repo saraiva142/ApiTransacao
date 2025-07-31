@@ -95,6 +95,29 @@ class UsuarioRepositoryTest {
             assertEquals(user.getCpfCnpj(), "111111111");
         }
 
+        @Test
+        @DisplayName("Should return empty and null when user not found by Cpf/Cnpj")
+        void findUserByCpfCnpjIsEmptyWhenNotFound() {
+            //Arrange
+            Long id = 1L;
+            Usuario user = new Usuario();
+            user.setId(id);
+            user.setNomeCompleto("Joao");
+            user.setEmail("email@email.com");
+            user.setSenha("123456");
+            user.setCarteira(null);
+            user.setTipoUsuario(TipoUsuario.COMMUM);
+
+            usuarioRepository.save(user);
+
+            //Act
+            Optional<Usuario> result = usuarioRepository.findUserBycpfCnpj(user.getCpfCnpj());
+
+            //Arrange
+            assertNull(result);
+            assert(result.isEmpty());
+        }
+
     }
 
     @Nested
